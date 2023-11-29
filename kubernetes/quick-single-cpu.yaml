@@ -18,7 +18,7 @@ spec:
       containers:
       - name: quick
         image: kkricksdsu/quick:single-cpu
-        command: ["/bin/bash", "-c", "./runtest --serial --full && sleep 3600"]
+        command: ["/bin/bash", "-c", "chown -R root:root /data && chmod 744 /data/scripts/*.sh && cd /data/scripts && ./single-cpu.sh"]
         resources:
           limits:
             cpu: "2"

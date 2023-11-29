@@ -27,8 +27,7 @@ spec:
       containers:
       - name: quick
         image: kkricksdsu/quick:mpi-cuda-11.7.1
-        # command: ["/bin/bash", "-c", "cd /data/quick-benchmarks && quick.cuda morphine.in && quick.cuda psb5.in && quick.cuda taxol.in && quick.cuda valinomycin.in"]
-        command: ["/bin/bash", "-c", "cd /data/input && mpirun --allow-run-as-root -np 2 quick.cuda.MPI water.in && sleep 3600"]
+        command: ["/bin/bash", "-c", "chown -R root:root /data && chmod 744 /data/scripts/*.sh && cd /data/scripts && ./mpi-cuda.sh"]
         resources:
           limits:
             cpu: "4"

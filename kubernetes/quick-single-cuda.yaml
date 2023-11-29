@@ -27,8 +27,7 @@ spec:
       containers:
       - name: quick
         image: kkricksdsu/quick:single-cuda-11.7.1
-        # command: ["/bin/bash", "-c", "cd /data/quick-benchmarks && quick.cuda morphine.in && quick.cuda psb5.in && quick.cuda taxol.in && quick.cuda valinomycin.in"]
-        command: ["/bin/bash", "-c", "cd /data/input && quick.cuda water.in && sleep 3600"]
+        command: ["/bin/bash", "-c", "chown -R root:root /data && chmod 744 /data/scripts/*.sh && cd /data/scripts && ./single-cuda.sh"]
         resources:
           limits:
             cpu: "4"
