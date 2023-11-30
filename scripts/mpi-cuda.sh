@@ -3,9 +3,8 @@
 # Init script variables
 input_dir='/data/input'
 output_dir='/data/output/mpi-cuda'
-input_files=(morphine)
-# input_files=(psb5 morphine taxol valinomycin)
-tasks="1 2"
+input_files=(psb5 morphine taxol valinomycin)
+tasks="1 2 4"
 
 # Verify input directory exists
 if [[ -d "$input_dir" ]] ; then
