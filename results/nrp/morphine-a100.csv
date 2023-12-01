@@ -1,0 +1,5 @@
+# morphine, B3LYP/6-31G**, SCF + gradient (40 atoms, 410 basis functions)
+GPU Type, GPU numbers, time/seconds, speedup (t1/tn), parallel efficiency (t1/tn/n)
+A100,  1, 28.2, 1.00, 1.00
+A100,  2, 20.1, 1.40, 0.70 
+A100,  4, 16.7, 1.69, 0.42 

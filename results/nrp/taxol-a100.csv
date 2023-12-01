@@ -1,0 +1,5 @@
+# Taxol, B3LYP/6-31G**, SCF + gradient (110 atoms, 1160 basis functions)
+GPU Type, GPU numbers, time/seconds, speedup (t1/tn), parallel efficiency (t1/tn/n)
+A100,  1,  122.4, 1.00, 1.00
+A100,  2,  72.9, 1.68, 0.84
+A100,  4,  48.3, 2.53, 0.63 
