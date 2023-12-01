@@ -1,4 +1,4 @@
-DFT B3LYP BASIS=6-31G** cutoff=1.0e-9 denserms=1.0e-8 GRADIENT
+DFT B3LYP BASIS=6-31G** cutoff=1.0e-7 denserms=1.0e-6 GRADIENT
 
  O         -1.99300       -0.47400        1.20050
  O         -2.78260       -2.51680       -0.22180
