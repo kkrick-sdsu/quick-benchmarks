@@ -17,15 +17,18 @@ spec:
           readOnly: true
       containers:
       - name: quick
-        image: kkricksdsu/quick:mpi-cpu
-        command: ["/bin/bash", "-c", "chown -R root:root /data && chmod 744 /data/scripts/*.sh && cd /data/scripts && ./mpi-cpu.sh"]
+        image: kkricksdsu/quick:mpi-cuda-11.7.1
+        command: ["/bin/bash", "-c", "chown -R root:root /data \
+                  && chmod 755 /data/scripts/*.sh \
+                  && cd /data/scripts \
+                  && ./bench.sh -i /data/input -o /data/output/mpi-cuda -f psb5,morphine,taxol,valinomycin -c quick.MPI"]
         resources:
           limits:
+            cpu: "8"
+            memory: "8Gi"
+          requests:
             cpu: "4"
             memory: "4Gi"
-          requests:
-            cpu: "2"
-            memory: "2Gi"
         volumeMounts:
         - name: quick-qm-benchmarks
           mountPath: "/data"

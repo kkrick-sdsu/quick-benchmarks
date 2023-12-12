@@ -17,8 +17,11 @@ spec:
           readOnly: true
       containers:
       - name: quick
-        image: kkricksdsu/quick:single-cpu
-        command: ["/bin/bash", "-c", "chown -R root:root /data && chmod 744 /data/scripts/*.sh && cd /data/scripts && ./single-cpu.sh"]
+        image: kkricksdsu/quick:mpi-cuda-11.7.1
+        command: ["/bin/bash", "-c", "chown -R root:root /data \
+                  && chmod 755 /data/scripts/*.sh \
+                  && cd /data/scripts \
+                  && ./bench.sh -i /data/input -o /data/output/mpi-cuda -f psb5,morphine,taxol,valinomycin -c quick"]
         resources:
           limits:
             cpu: "2"
