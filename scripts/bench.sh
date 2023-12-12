@@ -7,6 +7,54 @@ input_files=(psb5 morphine taxol valinomycin)
 command='quick.cuda.MPI'
 tasks="1 2 4"
 
+# Function to display help message
+# Credit: Generated with ChatGPT 3.5 Turbo
+display_help() {
+    echo "Usage: $0 [OPTIONS]"
+    echo "Options:"
+    echo "  -h, --help             Display this help message."
+    echo "  -i, --input-dir DIR   Set the input directory (default: '/data/input')."
+    echo "  -o, --output-dir DIR  Set the output directory (default: '/data/output/mpi-cuda')."
+    echo "  -f, --input-files LIST Set a comma-separated list of input files (default: 'psb5,morphine,taxol,valinomycin')."
+    echo "  -c, --command CMD     Set the command to execute (default: 'quick.cuda.MPI')."
+    echo "  -t, --tasks LIST      Set a space-separated list of tasks (default: '1 2 4')."
+    exit 0
+}
+
+# Parse command-line arguments
+# Credit: Generated with ChatGPT 3.5 Turbo
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        -i|--input-dir)
+            input_dir="$2"
+            shift 2
+            ;;
+        -o|--output-dir)
+            output_dir="$2"
+            shift 2
+            ;;
+        -f|--input-files)
+            IFS=',' read -ra input_files <<< "$2"
+            shift 2
+            ;;
+        -c|--command)
+            command="$2"
+            shift 2
+            ;;
+        -t|--tasks)
+            tasks="$2"
+            shift 2
+            ;;
+        -h|--help)
+            display_help
+            ;;
+        *)
+            echo "Unknown option: $1"
+            exit 1
+            ;;
+    esac
+done
+
 # Verify input directory exists
 if [[ -d "$input_dir" ]] ; then
     # Move to input directory
