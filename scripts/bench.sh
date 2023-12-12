@@ -2,10 +2,10 @@
 
 # Init script variables
 input_dir='/data/input'
-output_dir='/data/output/single-cpu'
-# input_files=(psb5.in morphine.in taxol.in valinomycin.in)
-input_files=(water.in)
-
+output_dir='/data/output/mpi-cuda'
+input_files=(psb5 morphine taxol valinomycin)
+command='quick.cuda.MPI'
+tasks="1 2 4"
 
 # Verify input directory exists
 if [[ -d "$input_dir" ]] ; then
@@ -20,9 +20,18 @@ fi
 # Process each of the input files
 for file in "${input_files[@]}"; do
     # Verify file exists
-    if [[ -f "$file" ]] ; then
+    if [[ -f "$file.in" ]] ; then
         echo "Processing file '$file'."
-        { time quick $file 2> /dev/null ; } 2> "$file.time"
+        # Check if running quick.MPI or quick.cuda.MPI for running with tasks
+        if [[ $command == *"MPI"* ]]; then
+            for t in $tasks; do
+                mpirun --allow-run-as-root -np $t $command "$file.in"
+                mv "$file.out" "$file.$t.out" 
+            done
+        # Running with quick or quick.CUDA, no need for MPI and tasks
+        else
+            $command "$file.in"
+        fi
     else
         # Handle case where file does not exist
         echo "Warning: '$file' does not exist. Skipping this file."
@@ -33,7 +42,6 @@ done
 if [[ -d "$output_dir" ]] ; then
     # Move output & time files to output directory
     mv *.out $output_dir
-    mv *.time $output_dir
     echo "Processing complete. See output at '$output_dir'."
 else
     # Handle case where output directory doesn't exist
