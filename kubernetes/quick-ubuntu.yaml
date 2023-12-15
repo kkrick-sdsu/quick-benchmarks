@@ -1,0 +1,32 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: quick-ubuntu
+spec:
+  template:
+    spec:
+      containers:
+      - name: ubuntu
+        image: ubuntu:latest
+        command: ["sleep", "infinity"]
+        resources:
+          limits:
+            cpu: "2"
+            memory: "4Gi"
+          requests:
+            cpu: "1"
+            memory: "1Gi"
+        volumeMounts:
+        - name: quick-qm-benchmarks
+          mountPath: "/data"
+        - name: rclone
+          mountPath: "/config/rclone/"
+          readOnly: true
+      restartPolicy: Never
+      volumes:
+      - name: rclone
+        secret:
+          secretName: rclone
+      - name: quick-qm-benchmarks
+        persistentVolumeClaim:
+          claimName: quick-qm-benchmarks
