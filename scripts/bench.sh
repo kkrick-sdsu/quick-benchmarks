@@ -74,11 +74,28 @@ for file in "${input_files[@]}"; do
         if [[ $command == *"MPI"* ]]; then
             for t in $tasks; do
                 mpirun --allow-run-as-root -np $t $command "$file.in"
+
+                # Log CPU info
+                echo "" >> "$file.out"
+                lscpu >> "$file.out"
+
+                # Log GPU info
+                echo "" >> "$file.out"
+                nvidia-smi >> "$file.out"
+
                 mv "$file.out" "$file.$t.out" 
             done
         # Running with quick or quick.CUDA, no need for MPI and tasks
         else
             $command "$file.in"
+
+            # Log CPU info
+            echo "" >> "$file.out"
+            lscpu >> "$file.out"
+
+            # Log GPU info
+            echo "" >> "$file.out"
+            nvidia-smi >> "$file.out"
         fi
     else
         # Handle case where file does not exist
