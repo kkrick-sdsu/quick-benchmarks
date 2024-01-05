@@ -79,10 +79,6 @@ for file in "${input_files[@]}"; do
                 echo "" >> "$file.out"
                 lscpu >> "$file.out"
 
-                # Log GPU info
-                echo "" >> "$file.out"
-                nvidia-smi >> "$file.out"
-
                 mv "$file.out" "$file.$t.out" 
             done
         # Running with quick or quick.CUDA, no need for MPI and tasks
@@ -92,10 +88,6 @@ for file in "${input_files[@]}"; do
             # Log CPU info
             echo "" >> "$file.out"
             lscpu >> "$file.out"
-
-            # Log GPU info
-            echo "" >> "$file.out"
-            nvidia-smi >> "$file.out"
         fi
     else
         # Handle case where file does not exist
