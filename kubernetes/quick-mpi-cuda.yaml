@@ -13,7 +13,13 @@ spec:
                 - key: nvidia.com/gpu.product
                   operator: In
                   values:
-                  - NVIDIA-A100-80GB-PCIe
+                  # - NVIDIA-GeForce-GTX-1080
+                  # - NVIDIA-GeForce-GTX-1080-Ti
+                  # - NVIDIA-GeForce-RTX-2080-Ti
+                  # - NVIDIA-GeForce-RTX-3090
+                  - NVIDIA-GeForce-RTX-4090
+                  # - NVIDIA-RTX-A6000
+                  # - NVIDIA-A100-80GB-PCIe
       initContainers:
       - name: rclone
         image: rclone/rclone:latest
@@ -33,12 +39,12 @@ spec:
                   && ./bench.sh -i /data/input -o /data/output/mpi-cuda -f psb5,morphine,taxol,valinomycin -c quick.cuda.MPI"]
         resources:
           limits:
-            cpu: "32"
-            memory: "320Gi"
+            cpu: "8"
+            memory: "32Gi"
             nvidia.com/gpu: "4"
           requests:
-            cpu: "16"
-            memory: "320Gi"
+            cpu: "4"
+            memory: "16Gi"
             nvidia.com/gpu: "4"
         volumeMounts:
         - name: quick-qm-benchmarks
