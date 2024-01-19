@@ -1,5 +1,0 @@
-# PSB5, B3LYP/6-31G**, SCF + gradient (22 atoms, 210 basis functions)
-GPU Type, GPU numbers, time/seconds, speedup (t1/tn), parallel efficiency (t1/tn/n)
-A100,  1, 11.6, 1.00, 1.00
-A100,  2, 10.5, 1.10, 0.55
-A100,  4, 10.7, 1.08, 0.27
