@@ -19,17 +19,16 @@ get_platform() {
 # Function to process a file
 process_file() {
     file=$1
-    gpu_type=$(cat $file | grep "CUDA DEVICE NAME" -m 1 | cut -d ":" -f 2)
-    gpu_count=$(cat $file | grep "CUDA ENABLED DEVICES" -m 1 | cut -d ":" -f 2)
-    scf_time=$(cat $file | grep "TOTAL SCF TIME" -m 1 | cut -d "=" -f 2 | cut -d "(" -f 1)
-    gradient_time=$(cat $file | grep "TOTAL GRADIENT TIME" -m 1 | cut -d "=" -f 2 | cut -d "(" -f 1)
-    total_time=$(cat $file | grep "TOTAL TIME" -m 1 | cut -d "=" -f 2)
-
+    gpu_type=$(cat $file | grep "CUDA DEVICE NAME" -m 1 | cut -d ":" -f 2 | tr ' ' '-' | sed 's/^-//')
+    gpu_count=$(cat $file | grep "CUDA ENABLED DEVICES" -m 1 | cut -d ":" -f 2 | sed 's/ //g')
+    scf_time=$(cat $file | grep "TOTAL SCF TIME" -m 1 | cut -d "=" -f 2 | cut -d "(" -f 1 | sed 's/ //g')
+    gradient_time=$(cat $file | grep "TOTAL GRADIENT TIME" -m 1 | cut -d "=" -f 2 | cut -d "(" -f 1 | sed 's/ //g')
+    total_time=$(cat $file | grep "TOTAL TIME" -m 1 | cut -d "=" -f 2 | sed 's/ //g')
     molecule=$(echo "$file" | awk -F/ '{print $NF}' | cut -d. -f1)
-    gpu_type_pretty=$(echo "$gpu_type" | tr ' ' '-' | sed 's/^-//')
     system=$(get_platform "$file")
-
-    echo "$gpu_type_pretty,$gpu_count,TRUE,$molecule,$scf_time,$gradient_time,$total_time,$system" | sed 's/ //g'
+    datetime=$(cat $file | grep -o 'TASK STARTS ON:.*$' | awk -F': ' '{print $2}')
+    #| sed 's/ //g'
+    echo "$gpu_type,$gpu_count,TRUE,$molecule,$scf_time,$gradient_time,$total_time,$system,$datetime"
 }
 
 # Recursive function to process files in the directory
@@ -54,5 +53,5 @@ process_directory() {
 }
 
 # Start processing the directory
-echo "gpu_type,gpu_count,containerized,molecule,scf_time,gradient_time,total_time,system"
+echo "gpu_type,gpu_count,containerized,molecule,scf_time,gradient_time,total_time,system,datetime"
 process_directory "$directory"
