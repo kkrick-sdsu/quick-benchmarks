@@ -12,7 +12,19 @@ get_platform() {
     elif echo "$filepath" | grep -q "/nrp/"; then
         echo "nrp"
     else
-        echo "unknown"
+        echo "NULL"
+    fi
+}
+
+# Function to extract containerized or not from filepath
+is_container() {
+    local filepath=$1
+    if echo "$filepath" | grep -q "/container/"; then
+        echo "TRUE"
+    elif echo "$filepath" | grep -q "/normal/"; then
+        echo "FALSE"
+    else
+        echo "NULL"
     fi
 }
 
@@ -21,6 +33,7 @@ process_file() {
     file=$1
     gpu_type=$(cat $file | grep "CUDA DEVICE NAME" -m 1 | cut -d ":" -f 2 | tr ' ' '-' | sed 's/^-//')
     gpu_count=$(cat $file | grep "CUDA ENABLED DEVICES" -m 1 | cut -d ":" -f 2 | sed 's/ //g')
+    containerized=$(is_container "$file")
     scf_time=$(cat $file | grep "TOTAL SCF TIME" -m 1 | cut -d "=" -f 2 | cut -d "(" -f 1 | sed 's/ //g')
     gradient_time=$(cat $file | grep "TOTAL GRADIENT TIME" -m 1 | cut -d "=" -f 2 | cut -d "(" -f 1 | sed 's/ //g')
     total_time=$(cat $file | grep "TOTAL TIME" -m 1 | cut -d "=" -f 2 | sed 's/ //g')
@@ -28,7 +41,7 @@ process_file() {
     system=$(get_platform "$file")
     datetime=$(cat $file | grep -o 'TASK STARTS ON:.*$' | awk -F': ' '{print $2}')
     #| sed 's/ //g'
-    echo "$gpu_type,$gpu_count,TRUE,$molecule,$scf_time,$gradient_time,$total_time,$system,$datetime"
+    echo "$gpu_type,$gpu_count,$containerized,$molecule,$scf_time,$gradient_time,$total_time,$system,$datetime"
 }
 
 # Recursive function to process files in the directory
